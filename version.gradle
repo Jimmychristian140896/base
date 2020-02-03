@@ -11,6 +11,7 @@ versions.atsl_junit = "1.1.1"
 versions.atsl_rules = "1.2.0"
 versions.atsl_runner = "1.2.0"
 versions.benchmark = "1.0.0"
+versions.browser = "1.2.0"
 versions.cardview = "1.0.0"
 versions.constraint_layout = "2.0.0-alpha2"
 versions.core_ktx = "1.1.0"
@@ -77,15 +78,19 @@ deps.atsl = atsl
 deps.benchmark = "androidx.benchmark:benchmark-junit4:$versions.benchmark"
 deps.benchmark_gradle = "androidx.benchmark:benchmark-gradle-plugin:$versions.benchmark"
 
+deps.browser = "androidx.browser:browser:$versions.browser"
+
 deps.cardview = "androidx.cardview:cardview:$versions.cardview"
 
 deps.constraint_layout = "androidx.constraintlayout:constraintlayout:$versions.constraint_layout"
 
 deps.core_ktx = "androidx.core:core-ktx:$versions.core_ktx"
+deps.collection_ktx = "androidx.collection:collection-ktx:$versions.core_ktx"
 
 deps.core_utils = "androidx.legacy:legacy-support-core-utils:$versions.core_utils"
 
 def coroutines = [:]
+coroutines.core = "org.jetbrains.kotlinx:kotlinx-coroutines-core:$versions.coroutines"
 coroutines.android = "org.jetbrains.kotlinx:kotlinx-coroutines-android:$versions.coroutines"
 coroutines.test = "org.jetbrains.kotlinx:kotlinx-coroutines-test:$versions.coroutines"
 deps.coroutines = coroutines
@@ -175,6 +180,7 @@ room.runtime = "androidx.room:room-runtime:$versions.room"
 room.compiler = "androidx.room:room-compiler:$versions.room"
 room.rxjava2 = "androidx.room:room-rxjava2:$versions.room"
 room.testing = "androidx.room:room-testing:$versions.room"
+room.ktx = "androidx.room:room-ktx:$versions.room"
 deps.room = room
 
 deps.rx_android = "io.reactivex.rxjava2:rxandroid:$versions.rx_android"
@@ -191,6 +197,7 @@ work.testing = "androidx.work:work-testing:$versions.work"
 work.firebase = "androidx.work:work-firebase:$versions.work"
 work.runtime_ktx = "androidx.work:work-runtime-ktx:$versions.work"
 deps.work = work
+
 
 ext.deps = deps
 
