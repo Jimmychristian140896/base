@@ -5,12 +5,17 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.liveData
-import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.*
 import kotlinx.coroutines.*
 
 class CoroutineSample : ViewModel() {
+    private val userId: LiveData<String> = MutableLiveData()
+    val user = userId.switchMap { id ->
+        liveData(context = viewModelScope.coroutineContext + Dispatchers.IO) {
+            emit(id)//database.loadUserById(id))
+        }
+    }
+
     suspend fun fetchDocs() {                             // Dispatchers.Main
         val result = get("https://developer.android.com") // Dispatchers.IO for `get`
         show(result)                                      // Dispatchers.Main
@@ -56,6 +61,11 @@ class CoroutineSample : ViewModel() {
 
         // Get a reference to the ViewModel scoped to its Activity
         val viewModel2 by activityViewModels<CoroutineSample>()
+
+        fun lifecyclerOwner() {
+            viewLifecycleOwner.lifecycleScope.launch {
+            }
+        }
     }
 
     class ActivitySample : AppCompatActivity() {

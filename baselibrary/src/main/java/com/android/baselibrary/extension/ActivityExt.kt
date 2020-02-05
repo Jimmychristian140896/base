@@ -12,15 +12,15 @@ import androidx.databinding.DataBindingUtil
 import androidx.databinding.ViewDataBinding
 
 
-fun Activity.isHasPermission(vararg permissions: String): Boolean {
+inline fun Activity.isHasPermission(vararg permissions: String): Boolean {
     return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M)
         permissions.all { singlePermission ->
-            applicationContext.checkSelfPermission(singlePermission) == PackageManager.PERMISSION_GRANTED
+            ActivityCompat.checkSelfPermission(applicationContext,singlePermission) == PackageManager.PERMISSION_GRANTED
         }
     else true
 }
 
-fun Activity.askPermission(vararg permissions: String, @IntRange(from = 0) requestCode: Int) =
+inline fun Activity.askPermission(vararg permissions: String, @IntRange(from = 0) requestCode: Int) =
     ActivityCompat.requestPermissions(this, permissions, requestCode)
 
 fun Activity.screenWidth(): Int {

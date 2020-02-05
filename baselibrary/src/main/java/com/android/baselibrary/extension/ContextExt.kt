@@ -7,7 +7,9 @@ import android.content.Context
 import android.content.Intent
 import android.graphics.drawable.Drawable
 import android.net.ConnectivityManager
+import android.net.NetworkCapabilities
 import android.net.Uri
+import android.os.Build
 import android.os.PowerManager
 import android.view.View
 import android.view.inputmethod.InputMethodManager
@@ -18,7 +20,6 @@ import androidx.annotation.StringRes
 import androidx.browser.customtabs.CustomTabsIntent
 import androidx.core.app.NotificationCompat
 import androidx.core.content.ContextCompat
-import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import androidx.work.ListenableWorker
 import androidx.work.OneTimeWorkRequest
 import androidx.work.OneTimeWorkRequestBuilder
@@ -26,8 +27,21 @@ import androidx.work.WorkManager
 import com.android.baselibrary.R
 
 fun Context.isInternetAvailable(): Boolean {
-    val activeNetworkInfo = connectivityManager.activeNetworkInfo
-    return activeNetworkInfo != null && activeNetworkInfo.isConnected
+    val connectivityManager = getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+    return if (Build.VERSION.SDK_INT < 23) {
+        val activeNetworkInfo = connectivityManager.activeNetworkInfo
+        activeNetworkInfo != null && activeNetworkInfo.isConnected
+    } else {
+        val nc = connectivityManager.getNetworkCapabilities(connectivityManager.activeNetwork)
+        if (nc == null) {
+            false
+        } else {
+            nc.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR) ||
+                    nc.hasTransport(NetworkCapabilities.TRANSPORT_WIFI)
+        }
+    }
+    /*val activeNetworkInfo = connectivityManager.activeNetworkInfo
+    return activeNetworkInfo != null && activeNetworkInfo.isConnected*/
 }
 
 inline fun Context.notification(
@@ -39,21 +53,7 @@ inline fun Context.notification(
     return builder.build()
 }
 
-fun Context.sendLocalBroadcast(intent: Intent) {
-    LocalBroadcastManager.getInstance(this).sendBroadcast(intent)
-}
 
-fun Context.openInBrowser(url: String) {
-    try {
-        val url = Uri.parse(url)
-        val intent = CustomTabsIntent.Builder()
-            //.setToolbarColor(getResourceColor(R.attr.colorPrimary))
-            .build()
-        intent.launchUrl(this, url)
-    } catch (e: Exception) {
-        toast(e.message)
-    }
-}
 
 inline fun <reified W : ListenableWorker> Context.enqueueWorker(func: OneTimeWorkRequest.Builder.() -> Unit) {
     val builder = OneTimeWorkRequestBuilder<W>()

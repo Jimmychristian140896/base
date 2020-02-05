@@ -23,13 +23,28 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+    kotlinOptions {
+        jvmTarget = "1.8"
+    }
+
+    dataBinding {
+        enabled = true
+    }
 }
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
-    implementation project(path: ':baselibrary')
+    //implementation project(path: ':baselibrary')
+    implementation 'com.github.Jimmychristian140896:base:1.4'
     kapt deps.room.compiler
     kapt deps.glide.compiler
+    implementation deps.map
+    //implementation 'com.google.android.gms:play-services-maps:17.0.0'
 
     implementation deps.core_ktx
     implementation deps.constraint_layout
